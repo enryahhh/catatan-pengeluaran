@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of './widgets.dart';
 
 class NewTransaction extends StatefulWidget {
   NewTransaction({Key? key, required this.addTrx}) : super(key: key);

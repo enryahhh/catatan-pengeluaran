@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
-import '../models/transaction.dart';
+part of 'widgets.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> userTransactions;
@@ -9,7 +6,6 @@ class TransactionList extends StatelessWidget {
  TransactionList({Key? key, required this.userTransactions})
       : super(key: key);
   @override
-  final TextStyle mainText = GoogleFonts.quicksand();
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height / 1.8,

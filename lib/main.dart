@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:personal_expenses_app/widgets/new_transaction.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+import 'package:personal_expenses_app/widgets/widgets.dart';
 import 'models/transaction.dart';
-import 'widgets/list_transaction.dart';
 
 void main() {
-  runApp(MyApp());
+  initializeDateFormatting('id_ID', null).then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -37,11 +38,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> listTransactions = [
-    // Transaction(id: '1', title: 'Shoes', amount: 22.0, date: DateTime.now()),
-    // Transaction(id: '2', title: 'Clothes', amount: 25.0, date: DateTime.now()),
-    // Transaction(
-    //     id: '3', title: 'Elektronik', amount: 255.0, date: DateTime.now()),
-    // Transaction(id: '4', title: 'Gaming', amount: 250.0, date: DateTime.now()),
+    
   ];
 
   void addNewTransaction(String title, double amount) {
@@ -67,8 +64,16 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
+  List<Transaction> get _getTransaction{
+    return listTransactions.where((trx){
+      return trx.date.isAfter(DateTime.now().subtract(Duration(days: 7),
+      ));
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(_getTransaction);
     return GestureDetector(
       onTap: () {
         FocusNode currentFocus = FocusScope.of(context);
@@ -87,12 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Container(
-                width: double.infinity,
-                child: Card(
-                  child: Text('Ini Chart'),
-                ),
-              ),
+              ChartTransaction(trxList: _getTransaction),
               listTransactions.isEmpty ? 
                 Column(
                   children: [
@@ -103,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )
                :
               TransactionList(
-                userTransactions: listTransactions,
+                userTransactions: _getTransaction,
               )
             ],
           ),
