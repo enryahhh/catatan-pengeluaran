@@ -13,17 +13,36 @@ class _NewTransactionState extends State<NewTransaction> {
   TextEditingController titleCtrl = new TextEditingController();
 
   TextEditingController amountCtrl = new TextEditingController();
+  DateTime? pickedDate;
 
   void inputNewTrx() {
+    if(amountCtrl.text.isEmpty){
+      return;
+    }
     final String txtTitle = titleCtrl.text;
     final double txtAmount = double.parse(amountCtrl.text);
 
-    if (txtTitle.isEmpty || txtAmount <= 0) {
+    if (txtTitle.isEmpty || txtAmount <= 0 || pickedDate == null) {
       return;
     }
 
-    widget.addTrx(txtTitle, txtAmount);
+    widget.addTrx(txtTitle, txtAmount,pickedDate);
     Navigator.of(context).pop();
+  }
+
+  void selectDate() {
+    showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2021, 1, 1),
+        lastDate: DateTime.now()).then((value){
+          if(value == null){
+            return;
+          }
+          setState(() {
+            pickedDate = value;
+          });
+        });
   }
 
   @override
@@ -50,6 +69,20 @@ class _NewTransactionState extends State<NewTransaction> {
                   border: UnderlineInputBorder(), labelText: 'Amount'),
               keyboardType: TextInputType.number,
               onSubmitted: (_) => inputNewTrx,
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Row(
+              children: [
+                Text(pickedDate == null ? "No date choosen" : "Picked Date : "+DateFormat.yMd().format(pickedDate!)),
+                TextButton(
+                    onPressed: () {
+                      selectDate();
+                    },
+                    child: Text("Choose date",
+                        style: TextStyle(fontWeight: FontWeight.bold)))
+              ],
             ),
             SizedBox(
               height: 16,
