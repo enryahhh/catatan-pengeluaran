@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
           headline6: GoogleFonts.openSans(fontWeight: FontWeight.bold,fontSize: 20.0)
         )),
       ),
-      home: MyHomePage(title: 'Personal Expenses'),
+      home: MyHomePage(title: 'Catatan Keuangan'),
     );
   }
 }
