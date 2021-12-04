@@ -2,8 +2,9 @@ part of 'widgets.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> userTransactions;
+  final Function delTrx;
 
-  TransactionList({Key? key, required this.userTransactions}) : super(key: key);
+  TransactionList({Key? key, required this.userTransactions,required this.delTrx}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,8 +26,20 @@ class TransactionList extends StatelessWidget {
                       ),
                     ),
                   ),
-                  title: Text('${userTransactions[index].title}',style: Theme.of(context).textTheme.headline6,),
-                  subtitle: Text(DateFormat.yMMMd().format(userTransactions[index].date)),
+                  title: Text(
+                    '${userTransactions[index].title}',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  subtitle: Text(
+                      DateFormat.yMMMd().format(userTransactions[index].date)),
+                  trailing: IconButton(
+                      onPressed: () {
+                        delTrx(userTransactions[index].id);
+                      },
+                      icon: Icon(
+                        Icons.delete,
+                        color: Theme.of(context).errorColor,
+                      )),
                 ),
               ));
         },

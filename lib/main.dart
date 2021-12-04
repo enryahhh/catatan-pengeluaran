@@ -18,9 +18,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         accentColor: Colors.amber,
-        textTheme: GoogleFonts.quicksandTextTheme(ThemeData.light().textTheme.copyWith(
-          headline6: GoogleFonts.openSans(fontWeight: FontWeight.bold,fontSize: 20.0)
-        )),
+        textTheme: GoogleFonts.quicksandTextTheme(ThemeData.light()
+            .textTheme
+            .copyWith(
+                headline6: GoogleFonts.openSans(
+                    fontWeight: FontWeight.bold, fontSize: 20.0))),
       ),
       home: MyHomePage(title: 'Catatan Keuangan'),
     );
@@ -37,11 +39,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> listTransactions = [
-    
-  ];
+  final List<Transaction> listTransactions = [];
 
-  void addNewTransaction(String title, double amount,DateTime choosenDate) {
+  void addNewTransaction(String title, double amount, DateTime choosenDate) {
     final newTrx = new Transaction(
         id: DateTime.now().toString(),
         title: title,
@@ -58,15 +58,42 @@ class _MyHomePageState extends State<MyHomePage> {
         context: ctx,
         builder: (builderCtx) {
           return GestureDetector(
-            onTap: (){},
-            behavior: HitTestBehavior.opaque,
+              onTap: () {},
+              behavior: HitTestBehavior.opaque,
               child: NewTransaction(addTrx: addNewTransaction));
         });
   }
 
-  List<Transaction> get _getTransaction{
-    return listTransactions.where((trx){
-      return trx.date.isAfter(DateTime.now().subtract(Duration(days: 7),
+  void deleteTrx(String id) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+                content: Text("Are you sure to delete this data?"),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Cancel"),
+                    style: ElevatedButton.styleFrom(primary: Colors.grey),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        listTransactions.removeWhere((trx) => trx.id == id);
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Yes"),
+                    style: ElevatedButton.styleFrom(primary: Colors.red),
+                  )
+                ]));
+  }
+
+  List<Transaction> get _getTransaction {
+    return listTransactions.where((trx) {
+      return trx.date.isAfter(DateTime.now().subtract(
+        Duration(days: 7),
       ));
     }).toList();
   }
@@ -88,23 +115,29 @@ class _MyHomePageState extends State<MyHomePage> {
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
+          actions: [
+            IconButton(onPressed: (){}, icon: Icon(Icons.filter_alt))
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               ChartTransaction(trxList: _getTransaction),
-              listTransactions.isEmpty ? 
-                Column(
-                  children: [
-                    SizedBox(height:20),
-                    Text("Transactions data is empty",style: Theme.of(context).textTheme.headline6,),
-                    Image.asset("assets/image/no_data.png")
-                  ],
-                )
-               :
-              TransactionList(
-                userTransactions: _getTransaction,
-              )
+              listTransactions.isEmpty
+                  ? Column(
+                      children: [
+                        SizedBox(height: 20),
+                        Text(
+                          "Transactions data is empty",
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        Image.asset("assets/image/no_data.png")
+                      ],
+                    )
+                  : TransactionList(
+                      userTransactions: _getTransaction,
+                      delTrx: deleteTrx,
+                    )
             ],
           ),
         ),
