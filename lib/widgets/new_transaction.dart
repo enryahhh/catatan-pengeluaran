@@ -49,47 +49,49 @@ class _NewTransactionState extends State<NewTransaction> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 5,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TextField(
-              controller: titleCtrl,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(), labelText: 'Title'),
-              onSubmitted: (_) => inputNewTrx,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            TextField(
-              controller: amountCtrl,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(), labelText: 'Amount'),
-              keyboardType: TextInputType.number,
-              onSubmitted: (_) => inputNewTrx,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              children: [
-                Text(pickedDate == null ? "No date choosen" : "Picked Date : "+DateFormat.yMd().format(pickedDate!)),
-                TextButton(
-                    onPressed: () {
-                      selectDate();
-                    },
-                    child: Text("Choose date",
-                        style: TextStyle(fontWeight: FontWeight.bold)))
-              ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            ElevatedButton(
-                onPressed: inputNewTrx, child: Text('Add Transaction'))
-          ],
+      child: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextField(
+                controller: titleCtrl,
+                decoration: const InputDecoration(
+                    border: UnderlineInputBorder(), labelText: 'Title'),
+                onSubmitted: (_) => inputNewTrx,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              TextField(
+                controller: amountCtrl,
+                decoration: const InputDecoration(
+                    border: UnderlineInputBorder(), labelText: 'Amount'),
+                keyboardType: TextInputType.number,
+                onSubmitted: (_) => inputNewTrx,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Row(
+                children: [
+                  Text(pickedDate == null ? "No date choosen" : "Picked Date : "+DateFormat.yMd().format(pickedDate!)),
+                  TextButton(
+                      onPressed: () {
+                        selectDate();
+                      },
+                      child: Text("Choose date",
+                          style: TextStyle(fontWeight: FontWeight.bold)))
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              ElevatedButton(
+                  onPressed: inputNewTrx, child: Text('Add Transaction'))
+            ],
+          ),
         ),
       ),
     );

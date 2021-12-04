@@ -6,7 +6,10 @@ import 'package:personal_expenses_app/widgets/widgets.dart';
 import 'models/transaction.dart';
 
 void main() {
-  initializeDateFormatting('id_ID', null).then((_) => runApp(MyApp()));
+  initializeDateFormatting('id_ID', null).then((_) {
+    // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    return runApp(MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -39,7 +42,78 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> listTransactions = [];
+  final List<Transaction> listTransactions = [
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+    Transaction(
+        id: DateTime.now().toString(),
+        title: 'tes',
+        amount: 15,
+        date: DateTime.now()),
+  ];
 
   void addNewTransaction(String title, double amount, DateTime choosenDate) {
     final newTrx = new Transaction(
@@ -98,9 +172,29 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
+  bool _showChart = false;
+
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     print(_getTransaction);
+    final appbar = AppBar(
+      title: Text(widget.title),
+      actions: [IconButton(onPressed: () {}, icon: Icon(Icons.filter_alt))],
+    );
+    final heightDevice = MediaQuery.of(context).size.height;
+
+    final listTrxWidget = Container(
+      child: TransactionList(
+        userTransactions: _getTransaction,
+        delTrx: deleteTrx,
+      ),
+      height: (heightDevice -
+              appbar.preferredSize.height -
+              MediaQuery.of(context).padding.top) *
+          0.7,
+    );
     return GestureDetector(
       onTap: () {
         FocusNode currentFocus = FocusScope.of(context);
@@ -111,33 +205,43 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
-          actions: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.filter_alt))
-          ],
-        ),
+        appBar: appbar,
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              ChartTransaction(trxList: _getTransaction),
-              listTransactions.isEmpty
-                  ? Column(
-                      children: [
-                        SizedBox(height: 20),
-                        Text(
-                          "Transactions data is empty",
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                        Image.asset("assets/image/no_data.png")
-                      ],
-                    )
-                  : TransactionList(
-                      userTransactions: _getTransaction,
-                      delTrx: deleteTrx,
-                    )
+              if (isLandscape)
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text("Show Chart"),
+                  Switch(
+                      value: _showChart,
+                      onChanged: (val) {
+                        setState(() {
+                          _showChart = val;
+                        });
+                      }),
+                ]),
+              if (!isLandscape)
+                Container(
+                  margin: EdgeInsets.all(8),
+                  child: ChartTransaction(trxList: _getTransaction),
+                  height: (heightDevice -
+                          appbar.preferredSize.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.3,
+                ),
+              if (!isLandscape) listTrxWidget,
+              if (isLandscape)
+                _showChart
+                    ? Container(
+                        margin: EdgeInsets.all(8),
+                        child: ChartTransaction(trxList: _getTransaction),
+                        height: (heightDevice -
+                                appbar.preferredSize.height -
+                                MediaQuery.of(context).padding.top) *
+                            0.7,
+                      )
+                    : listTrxWidget
             ],
           ),
         ),

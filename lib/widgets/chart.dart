@@ -27,12 +27,7 @@ class ChartTransaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10),
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height -
-          (MediaQuery.of(context).size.height - 150),
-      child: Card(
+    return  Card(
         elevation:6,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -53,7 +48,6 @@ class ChartTransaction extends StatelessWidget {
               //],
               ),
         ),
-      ),
     );
   }
 }

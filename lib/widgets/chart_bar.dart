@@ -15,16 +15,22 @@ class ChartBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(spendingTotal);
-    return Container(
-      child: Column(
-        children: [
-          FittedBox(
-            child: Text("\$${spendingAmnt.toStringAsFixed(0)}"),
-          ),
-          SizedBox(height:4),
-          Expanded(
-            child: Container(
+    return LayoutBuilder(
+      builder: (ctx, constraint) {
+        final availableHeight = constraint.maxHeight;
+        return Column(
+          // mainAxisAlignment:MainAxisAlignment.center,
+          children: [
+            Container(
+              height: availableHeight * 0.12,
+              child: FittedBox(
+                child: Text("\$${spendingAmnt.toStringAsFixed(0)}"),
+              ),
+            ),
+            SizedBox(height: availableHeight * 0.05),
+            Container(
               width: 15,
+              height: availableHeight * 0.6,
               child: Stack(children: [
                 Container(
                   decoration: BoxDecoration(
@@ -35,17 +41,21 @@ class ChartBar extends StatelessWidget {
                 FractionallySizedBox(
                   heightFactor: spendingTotal,
                   child: Container(
-                    decoration:
-                        BoxDecoration(color: Theme.of(context).primaryColor,borderRadius: BorderRadius.circular(10),),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 )
               ]),
             ),
-          ),
-          SizedBox(height:4),
-          Text("$label")
-        ],
-      ),
+            SizedBox(height: availableHeight * 0.05),
+            Container(
+                height: availableHeight * 0.12,
+                child: FittedBox(child: Text(label)))
+          ],
+        );
+      },
     );
   }
 }
