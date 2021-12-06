@@ -42,78 +42,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> listTransactions = [
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-    Transaction(
-        id: DateTime.now().toString(),
-        title: 'tes',
-        amount: 15,
-        date: DateTime.now()),
-  ];
+  final List<Transaction> listTransactions = [];
 
   void addNewTransaction(String title, double amount, DateTime choosenDate) {
     final newTrx = new Transaction(
@@ -174,6 +103,45 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool _showChart = false;
 
+  List<Widget> _buildPotraitWidget(
+      double heightDevice, AppBar appbar, Widget listTrxWidget) {
+    return [
+      Container(
+        margin: EdgeInsets.all(8),
+        child: ChartTransaction(trxList: _getTransaction),
+        height: (heightDevice -
+                appbar.preferredSize.height -
+                MediaQuery.of(context).padding.top) *
+            0.3,
+      ),
+      listTrxWidget
+    ];
+  }
+
+  List<Widget> _buildLandscapeWidget(double heightDevice, AppBar appbar, Widget listTrxWidget){
+    return[
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text("Show Chart"),
+                  Switch(
+                      value: _showChart,
+                      onChanged: (val) {
+                        setState(() {
+                          _showChart = val;
+                        });
+                      }),
+                ]),_showChart
+                    ? Container(
+                        margin: EdgeInsets.all(8),
+                        child: ChartTransaction(trxList: _getTransaction),
+                        height: (heightDevice -
+                                appbar.preferredSize.height -
+                                MediaQuery.of(context).padding.top) *
+                            0.7,
+                      )
+                    : listTrxWidget
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLandscape =
@@ -211,37 +179,10 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               if (isLandscape)
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text("Show Chart"),
-                  Switch(
-                      value: _showChart,
-                      onChanged: (val) {
-                        setState(() {
-                          _showChart = val;
-                        });
-                      }),
-                ]),
+                ..._buildLandscapeWidget(heightDevice, appbar, listTrxWidget),
               if (!isLandscape)
-                Container(
-                  margin: EdgeInsets.all(8),
-                  child: ChartTransaction(trxList: _getTransaction),
-                  height: (heightDevice -
-                          appbar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
-                      0.3,
-                ),
-              if (!isLandscape) listTrxWidget,
-              if (isLandscape)
-                _showChart
-                    ? Container(
-                        margin: EdgeInsets.all(8),
-                        child: ChartTransaction(trxList: _getTransaction),
-                        height: (heightDevice -
-                                appbar.preferredSize.height -
-                                MediaQuery.of(context).padding.top) *
-                            0.7,
-                      )
-                    : listTrxWidget
+                  ..._buildPotraitWidget(heightDevice, appbar, listTrxWidget),
+                
             ],
           ),
         ),
